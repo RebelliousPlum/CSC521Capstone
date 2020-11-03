@@ -1,1 +1,0 @@
-"testing content, please disregard"  git add gitCommitTest.txt git commit -m "added gitCommitTest.txt to the repo"
