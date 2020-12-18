@@ -1,1 +1,2 @@
-# Stock-Market-Predictor
+# CSC521 Capstone
+# Stock Market Predictor
