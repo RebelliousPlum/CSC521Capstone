@@ -1,34 +1,30 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import yfinance as yf
+import pandas as pd
+import matplotlib.pyplot as pyplot
 
-print(pd.__version__)
-print(yf.__version__)
-print(np.__version__)
 
-msft = yf.Ticker("MSFT")
-print(msft)
-"""
-returns
-<yfinance.Ticker object at 0x1a1715e898>
-"""
 
-# get stock info
-msft.info
+data = yf.download(tickers = "SPY AAPL MSFT", period = "10y", group_by="ticker")
 
-"""
-returns:
-{
- 'quoteType': 'EQUITY',
- 'quoteSourceName': 'Nasdaq Real Time Price',
- 'currency': 'USD',
- 'shortName': 'Microsoft Corporation',
- 'exchangeTimezoneName': 'America/New_York',
-  ...
- 'symbol': 'MSFT'
-}
-"""
+tick = input("Enter stock name: ")
 
-# get historical market data, here max is 5 years.
-print(msft.history(period="max"))
+Open = data[tick]['Open']
+Close = data[tick]['Close']
+Low = data[tick]['Low'] 
+High = data[tick]['High']
+Volume = data[tick]['Volume']
+
+
+dfOne = pd.DataFrame(Open, columns = ["Open"])
+dfTwo = pd.DataFrame(Volume, columns = ["Volume"])
+dfThree = pd.DataFrame(Low, columns = ["Low"])
+dfFour = pd.DataFrame(High, columns = ["High"])
+dfFive = pd.DataFrame(Close, columns = ["Close"])
+
+
+df_all = pd.concat([dfOne, dfTwo, dfThree, dfFour,dfFive], axis = 1)
+
+X = df_all.iloc[: , [True, True, True, True, False]]
+y = df_all.iloc[:, [False,False,False,False,True]]
+
+print(y.head())
