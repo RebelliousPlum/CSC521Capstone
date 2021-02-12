@@ -7,5 +7,5 @@ To do:
 2.) Test different LSTM architectures to determine best fit.
 
 References:
-Zou, Zhichao, and Zihao Qu. “Using LSTM in Stock Prediction and Quantitative Trading.” Https://cs230.Stanford.edu/projects_winter_2020/Reports/32066186.Pdf, Stanford, 2020. 
+Zou, Zhichao, and Zihao Qu. “Using LSTM in Stock Prediction and Quantitative Trading.” https://cs230.Stanford.edu/projects_winter_2020/Reports/32066186.pdf, Stanford, 2020. 
 
