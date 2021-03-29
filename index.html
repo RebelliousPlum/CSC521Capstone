@@ -1,97 +1,62 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Stonks go brrr</title>  
-        <style>
-            ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Stonks go Brrr</title>
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
 
-li {
-  float: left;
-}
-
-li a, .dropbtn {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover, .dropdown:hover .dropbtn {
-  background-color: red;
-}
-
-li.dropdown {
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown-content a:hover {background-color: #f1f1f1;}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-            .center
-            {
-                display: block;
-                margin-left: auto;
-                margin-right: auto;
-                width: 50%;
-            }
-
-        </style>
     </head>
+
     <body>
+        <header>
+            <div class="wrapper">
+                <h1>Stonks go Brrr<span class="color">.</span></h1>
+                <nav>
+                    <ul>
+                        <li><a href="homePage.html">Home</a></li>
+                        
+                        <li class="dropdown">
+                          <a href="javascript:void(0)" class="dropbtn">Select your Stock</a>
+                          <div class="dropdown-content">
+                            <a href="Microsoft.html">Microsoft</a>
+                            <a href="Apple.html">Apple</a>
+                            <a href="Kellogs.html">Kellog's</a>
+                          </div>
+                        </li>
+                      </ul>
+                </nav>
+            </div>
+        </header>
 
+        <div id="hero-image">
+            <div class="wrapper">
+                <h2><strong>Come and try</strong><br/>
+                    Choose a Stock!</h2>
+                  
+                        <a href="Microsoft.html" class="button-1">Microsoft</a>
+                        <a href="Apple.html" class="button-1">Apple</a>
+                        <a href="Kellogs.html" class="button-1">Kellog's</a>
+                    
+                   
+            </div>
+        </div>
 
-    
-  
-
-    
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        
-        <li class="dropdown">
-          <a href="javascript:void(0)" class="dropbtn">Select your Stock</a>
-          <div class="dropdown-content">
-            <a href="Microsoft.html">Microsoft</a>
-            <a href="Apple.html">Apple</a>
-            <a href="Kellogs.html">Kellog's</a>
-          </div>
-        </li>
-      </ul>
-
-      <ul>
-      <div class = "placeHolderImage">
-        <img src="defualtPlaceHolderImage.jfif" alt="placeHolderImage" width="256" height="256" class="center">    
-    </div>
-    </ul>
-
-        <script> 
-        </script>
-        </body>
-        
+       
+   
+        <footer>
+            <div class="wrapper">
+                <div id="footer-info">
+                </div>
+                <div id="footer-links">
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>
