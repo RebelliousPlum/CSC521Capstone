@@ -107,9 +107,10 @@ def StockOne():
     model = tf.keras.Sequential([
         tf.keras.layers.LSTM(units = 20, return_sequences = True, input_shape = (X_train.shape[1],X_train.shape[2])),
         tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.LSTM(units= 20,return_sequences = True ),
+        tf.keras.layers.LSTM(units= 20, return_sequences = True),
         tf.keras.layers.Dropout(0.2),
         tf.keras.layers.LSTM(units = 15, return_sequences = False),
+
         tf.keras.layers.Dense(1)
     ])
 
@@ -123,7 +124,7 @@ def StockOne():
     #Begin Timer to see how long it takes to train
     Start_time = ti.time()
 
-    es = EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1 , patience = 5)
+    es = EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1 , patience = 3)
 
     history = model.fit(
         X_train, y_train,
@@ -150,6 +151,7 @@ def StockOne():
     print("Accuracy:" , {score[1]})
     print('RMSE = ', rmse_y_test)
     print('MSE = ', mse)
+    print("R2 Score = {0:0.2%}".format(r2_score(y_test,y_pred)))
 
 
     #Plot Model train vs Validation loss to determine if the model is underfitting or overfitting. This is based on googling "How to determine if an LSTM architecture in underfitting or overfitting"
@@ -192,19 +194,21 @@ def StockTwo():
 
 
     #Information ticker for stock
-    ticker = yf.download("UNP", start=previousTenY, end=d1, group_by='tickers')
+    ticker = yf.download("BB", start=previousTenY, end=d1, group_by='tickers')
 
     #Tickers to determine what data is being used. The 'Open' is the opening price of stocks each day. 
     #The 'Low' and 'High' are the lowest and highest price of each stock within a day.
     #The 'Adj Close' is the closing price when factoring in corporate actions and other technical factors
     #The 'Close' is the end of the day raw cash value of the stock
     df = ticker[['Close','High','Low','Open','Adj Close']].copy()
+    df2 = ticker['Close'].copy()
 
 
 
     #Normalize the data to be within a range of (0,1) 
     scaler = MinMaxScaler(feature_range = (0,1))
     df = scaler.fit_transform(np.array(df).reshape(-1,1))
+    df2 = scaler.fit_transform(np.array(df2).reshape(-1,1))
 
 
     #Split the data into an 80/20 ratio for training and testing
@@ -237,10 +241,12 @@ def StockTwo():
     model = tf.keras.Sequential([
         tf.keras.layers.LSTM(units = 15, return_sequences = True, input_shape = (X_train.shape[1],X_train.shape[2])),
         tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.LSTM(units = 5, return_sequences = True),
+        tf.keras.layers.LSTM(units = 15, return_sequences = True),
+        tf.keras.layers.Dropout(0.2),
+        tf.keras.layers.LSTM(units = 10, return_sequences = True),
         tf.keras.layers.Dropout(0.2),
         tf.keras.layers.LSTM(units = 5, return_sequences = False),
-        tf.keras.layers.Dropout(0.2),
+    
         tf.keras.layers.Dense(1)
     ])
 
@@ -259,7 +265,7 @@ def StockTwo():
     history = model.fit(
         X_train, y_train,
         epochs=20,
-        batch_size=128,
+        batch_size=64,
         verbose=1,
         validation_data = (X_test, y_test),
         shuffle = False,
@@ -270,17 +276,16 @@ def StockTwo():
     End_time = ti.time()
     print("The total time taken: ", round((End_time-Start_time)/60), 'Minutes')
 
-    y_pred = model.predict(X_test)
-
+    test_predict = model.predict(X_test)
 
     #Accuracy meaningless for regression problems(?)
-    rmse_y_test = sqrt(mean_squared_error(y_test, y_pred))
-    mse = np.mean((y_test - y_pred)**2)
-    score = model.evaluate(X_test,y_test, verbose=1)
-    print("Mean Absolute Error: ", mean_absolute_error(y_test, y_pred))
-    print("Accuracy:" , {score[1]})
+    rmse_y_test = sqrt(mean_squared_error(y_test, test_predict))
+    mse = np.mean((y_test - test_predict)**2)
+    score = model.evaluate(X_test,test_predict, verbose=1)
+    print("Mean Absolute Error: ", mean_absolute_error(y_test, test_predict))
     print('RMSE = ', rmse_y_test)
     print('MSE = ', mse)
+    print("R2 Score = {0:0.2%}".format(r2_score(y_test,test_predict)))
 
 
     #Plot Model train vs Validation loss to determine if the model is underfitting or overfitting. This is based on googling "How to determine if an LSTM architecture in underfitting or overfitting"
@@ -295,25 +300,10 @@ def StockTwo():
 
 
 
-
-    #Plot predictions
-    y_pred = scaler.inverse_transform(y_pred)
-    fig, ax = plt.subplots(figsize=(20, 10))
-
-    #Reshape back to original data format
-    y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
-
-    #plotting the predictions vs the true
-    plt.plot(y_test_scaled, label="True Price")
-    plt.plot(y_pred, label='Predicted Testing Price')
-    plt.xlabel('Time Steps')
-    plt.ylabel('Price')
-    plt.title("Union Pacific Predictions")
-    plt.legend()
-    plt.savefig("Union Pacific Predictions")
+ 
    
 def StockThree():
-     #Get todays date
+    #Get todays date
     today = date.today()
     d1 = today.strftime("%Y-%m-%d")
 
@@ -386,12 +376,12 @@ def StockThree():
     #Begin Timer to see how long it takes to train
     Start_time = ti.time()
 
-    es = EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1 , patience = 5)
+    es = EarlyStopping(monitor = 'val_loss', mode = 'min', verbose = 1 , patience = 3)
 
     history = model.fit(
         X_train, y_train,
-        epochs=20,
-        batch_size=64,
+        epochs=30,
+        batch_size=128,
         verbose=1,
         validation_data = (X_test, y_test),
         shuffle = False,
@@ -414,6 +404,11 @@ def StockThree():
     print('RMSE = ', rmse_y_test)
     print('MSE = ', mse)
     print("R2 Score = {0:0.2%}".format(r2_score(y_test,y_pred)))
+    model.save('savedModel.h5')
+    model_use = keras.models.load_model("savedModel.h5")
+    modeltest = model_use.predict(X_test)
+    print("TestValue = {0:0.2%}".format(r2_score(y_test,modeltest)))
+
 
 
     #Plot Model train vs Validation loss to determine if the model is underfitting or overfitting. This is based on googling "How to determine if an LSTM architecture in underfitting or overfitting"
@@ -442,7 +437,6 @@ def StockThree():
     plt.title("Disney Predictions")
     plt.legend()
     plt.savefig("Disney Predictions")
-
 
 StockThree()
 
