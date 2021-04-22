@@ -37,19 +37,6 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', -1)
 
 
-#This is to enable GPU use for training the model
-config = tf.compat.v1.ConfigProto(gpu_options = 
-                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
-# device_count = {'GPU': 1}
-)
-gpus = tf.config.experimental.list_physical_devices('GPU')
-config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config=config)
-tf.compat.v1.keras.backend.set_session(session)
-tf.config.experimental.set_virtual_device_configuration(gpus[0], 
-   [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
-
-
 
 def StockOne():
     #Get todays date
