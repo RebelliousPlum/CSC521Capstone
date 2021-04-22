@@ -20,7 +20,7 @@ ticker = yf.Ticker("UNP")
 data = ticker.history(period = "10y", interval = "1d")
 
 data.sort_values('Date', inplace = True, ascending = True)
-print(ticker.info['LongBusinessSummary'])
+
 
 new = yf.download("AAPL", start='2011-02-16', end='2021-02-16', group_by='tickers')
 df = new[['Close','Open','Low','High','Adj Close']].copy()
