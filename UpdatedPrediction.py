@@ -6,6 +6,7 @@ import csv
 from math import sqrt
 import schedule
 from getch import pause
+import warnings
 
 #Libraries used for plotting and graphing
 import matplotlib.pyplot as plt 
@@ -33,17 +34,8 @@ from datetime import date
 import datetime
 import time as ti
 
-#This is to enable GPU use for training the model
-config = tf.compat.v1.ConfigProto(gpu_options = 
-                         tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
-# device_count = {'GPU': 1}
-)
-gpus = tf.config.experimental.list_physical_devices('GPU')
-config.gpu_options.allow_growth = True
-session = tf.compat.v1.Session(config=config)
-tf.compat.v1.keras.backend.set_session(session)
-tf.config.experimental.set_virtual_device_configuration(gpus[0], 
-   [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+with warnings.catch_warnings():
+    warnings.filterwarnings('ignore', r'elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison(.*)')
 
 
 def DataDis():
@@ -108,11 +100,13 @@ def DataDis():
         model = tf.keras.Sequential([
             tf.keras.layers.LSTM(units = 15, return_sequences = True, input_shape = (X_train.shape[1],X_train.shape[2])),
             tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.LSTM(units = 5, return_sequences = True),
+            tf.keras.layers.LSTM(units = 15, return_sequences = False),
             tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.LSTM(units = 5, return_sequences = False),
-            tf.keras.layers.Dropout(0.2),
-
+         
+        
+         
+         
+    
             tf.keras.layers.Dense(1)
         ])
 
@@ -156,8 +150,8 @@ def DataDis():
         print("R2 Score = {0:0.2%}".format(r2_score(y_test,test_predict)))
         
 
-        if r2 < .75:
-            while r2 < .75:
+        if r2 < .70:
+            while r2 < .70:
                 #Reset the states
                 K.clear_session()
 
@@ -165,11 +159,9 @@ def DataDis():
                 model = tf.keras.Sequential([
                     tf.keras.layers.LSTM(units = 15, return_sequences = True, input_shape = (X_train.shape[1],X_train.shape[2])),
                     tf.keras.layers.Dropout(0.2),
-                    tf.keras.layers.LSTM(units = 5, return_sequences = True),
+                    tf.keras.layers.LSTM(units = 15, return_sequences = False),
                     tf.keras.layers.Dropout(0.2),
-                    tf.keras.layers.LSTM(units = 5, return_sequences = False),
-                    tf.keras.layers.Dropout(0.2),
-
+    
                     tf.keras.layers.Dense(1)
                 ])
 
@@ -268,7 +260,7 @@ def DataDis():
     print(len(df2))
     
     listValues = scaler.inverse_transform(lst_output)
-    dfTempt = dfTemp.reindex(pd.date_range("2021-04-10", "2021-05-10") )
+    listValues = np.array(listValues).ravel()
  
     df3 = df2.tolist()
     df3.extend(lst_output)
@@ -280,16 +272,37 @@ def DataDis():
 
 
 
-
+    
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
     plt.xlabel('Days - 10 year data')
-    plt.show()
+    plt.title("Disney Predicted Price")
+    plt.savefig("DisneyPredict")
+    plt.gcf().clear()
+
+    fig,ax = plt.subplots()
+
+    table_data = [
+        ["Date", "Closing Prices in USD"],
+        ["4/23", listValues[0]],
+        ["4/24", listValues[1]],
+        ["4/25", listValues[2]],
+        ["4/26", listValues[3]],
+        ["4/27", listValues[4]]
+    ]
+
+    table = ax.table(cellText = table_data, loc='center')
+
+    table.set_fontsize(14)
+    table.scale(1,4)
+    ax.axis('off')
+    plt.savefig('Disney 5 day Closing')
+    plt.gcf().clear()
         
-    y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
     plt.scatter(listValues,y)
-    plt.show()
+    plt.show() """
 
 def DataNord():
     #Get todays date
@@ -355,7 +368,7 @@ def DataNord():
             tf.keras.layers.Dropout(0.2),
             tf.keras.layers.LSTM(units = 20, return_sequences = True),
             tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.LSTM(units = 15, return_sequences = False),
+            tf.keras.layers.LSTM(units = 10, return_sequences = False),
             tf.keras.layers.Dropout(0.2),
 
             tf.keras.layers.Dense(1)
@@ -375,7 +388,7 @@ def DataNord():
 
         history = model.fit(
             X_train, y_train,
-            epochs=25,
+            epochs=35,
             batch_size=128,
             verbose=1,
             validation_data = (X_test, y_test),
@@ -412,7 +425,7 @@ def DataNord():
                     tf.keras.layers.Dropout(0.2),
                     tf.keras.layers.LSTM(units = 20, return_sequences = True),
                     tf.keras.layers.Dropout(0.2),
-                    tf.keras.layers.LSTM(units = 15, return_sequences = False),
+                    tf.keras.layers.LSTM(units = 10, return_sequences = False),
                     tf.keras.layers.Dropout(0.2),
 
                     tf.keras.layers.Dense(1)
@@ -432,7 +445,7 @@ def DataNord():
 
                 history = model.fit(
                     X_train, y_train,
-                    epochs=25,
+                    epochs=35,
                     batch_size=128,
                     verbose=1,
                     validation_data = (X_test, y_test),
@@ -513,8 +526,8 @@ def DataNord():
     print(len(df2))
     
     listValues = scaler.inverse_transform(lst_output)
-    dfTempt = dfTemp.reindex(pd.date_range("2021-04-10", "2021-05-10") )
- 
+    listValues = np.array(listValues).ravel()
+
     df3 = df2.tolist()
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
@@ -525,16 +538,41 @@ def DataNord():
 
 
 
-
+    
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
     plt.xlabel('Days - 10 year data')
-    plt.show()
-        
-    y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    plt.title("Nordstrom Price Trend")
+    plt.savefig("NordstromPredicted")
+    plt.gcf().clear()
+
+    fig,ax = plt.subplots()
+
+    table_data = [
+        ["Date", "Closing Prices in USD"],
+        ["4/23", listValues[0]],
+        ["4/24", listValues[1]],
+        ["4/25", listValues[2]],
+        ["4/26", listValues[3]],
+        ["4/27", listValues[4]]
+    ]
+
+    table = ax.table(cellText = table_data, loc='center')
+
+    table.set_fontsize(14)
+    table.scale(1,4)
+    ax.axis('off')
+    plt.savefig('Nordstrom 5 day Closing')
+    plt.gcf().clear()
+
+    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
     plt.scatter(listValues,y)
-    plt.show()
+    plt.show() """
+    rows = ("4/23" , "4/24", "4/25", "4/26", "4/27")
+    column = ("Closing Price")
+
+
 
 def DataBB():
     #Get todays date
@@ -761,34 +799,62 @@ def DataBB():
     print(len(df2))
     
     listValues = scaler.inverse_transform(lst_output)
+    listValues = np.array(listValues).ravel()
+    print(listValues)
+   
  
     df3 = df2.tolist()
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
-
-    #Last object in list 
-    print(listValues[:-1])
-
-
+  
+    """ #Last object in list 
+    print(listValues[2 ,-1:]) """
 
 
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
     plt.xlabel('Days - 10 year data')
-    plt.show()
-        
-    y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    plt.title("BlackBerry Price Trend")
+    plt.savefig("BlackBerry")
+    plt.gcf().clear()
+
+    fig,ax = plt.subplots()
+
+    table_data = [
+        ["Date", "Closing Prices in USD"],
+        ["4/23", listValues[0]],
+        ["4/24", listValues[1]],
+        ["4/25", listValues[2]],
+        ["4/26", listValues[3]],
+        ["4/27", listValues[4]]
+    ]
+
+    table = ax.table(cellText = table_data, loc='center')
+
+    table.set_fontsize(14)
+    table.scale(1,4)
+    ax.axis('off')
+    plt.savefig('BlackBerry 5 day Closing')
+    plt.gcf().clear()
+
+
+
+    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
     plt.yticks(y)
     plt.scatter(listValues,y)
-    plt.show()
+    plt.show() """
 
-
-DataDis()
+""" DataDis()
+K.clear_session()
 DataNord()
-DataBB()
-""" schedule.every().day.at("16:17").do(DataBB)
+K.clear_session()
+DataBB() """
+schedule.every().monday.do(DataDis)
+schedule.every().monday.do(DataNord)
+schedule.every().monday.do(DataBB)
+
 
 while True:
     schedule.run_pending()
@@ -796,6 +862,6 @@ while True:
     out = input('Press f key to exit\n')
     if out:
         exit(0)
- """
+
 
 
