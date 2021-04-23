@@ -7,6 +7,7 @@ from math import sqrt
 import schedule
 from getch import pause
 import warnings
+import os
 
 #Libraries used for plotting and graphing
 import matplotlib.pyplot as plt 
@@ -33,6 +34,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 from datetime import date
 import datetime
 import time as ti
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 with warnings.catch_warnings():
     warnings.filterwarnings('ignore', r'elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison(.*)')
@@ -261,6 +264,8 @@ def DataDis():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
  
     df3 = df2.tolist()
     df3.extend(lst_output)
@@ -268,8 +273,8 @@ def DataDis():
     dfObj = pd.DataFrame(df3)
 
     #Last object in list 
-    print(listValues[:-1])
-
+    print("This is ListValues ", listValues[:-1])
+    print("This is Output ", Output)
 
 
     
@@ -285,11 +290,11 @@ def DataDis():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        ["4/23", Output[0]],
+        ["4/24", Output[1]],
+        ["4/25", Output[2]],
+        ["4/26", Output[3]],
+        ["4/27", Output[4]]
     ]
 
     table = ax.table(cellText = table_data, loc='center')
@@ -299,10 +304,7 @@ def DataDis():
     ax.axis('off')
     plt.savefig('Disney 5 day Closing')
     plt.gcf().clear()
-        
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.scatter(listValues,y)
-    plt.show() """
+
 
 def DataNord():
     #Get todays date
@@ -527,6 +529,8 @@ def DataNord():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
 
     df3 = df2.tolist()
     df3.extend(lst_output)
@@ -551,11 +555,11 @@ def DataNord():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        ["4/23", Output[0]],
+        ["4/24", Output[1]],
+        ["4/25", Output[2]],
+        ["4/26", Output[3]],
+        ["4/27", Output[4]]
     ]
 
     table = ax.table(cellText = table_data, loc='center')
@@ -565,12 +569,6 @@ def DataNord():
     ax.axis('off')
     plt.savefig('Nordstrom 5 day Closing')
     plt.gcf().clear()
-
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.scatter(listValues,y)
-    plt.show() """
-    rows = ("4/23" , "4/24", "4/25", "4/26", "4/27")
-    column = ("Closing Price")
 
 
 
@@ -800,6 +798,8 @@ def DataBB():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
     print(listValues)
    
  
@@ -808,8 +808,6 @@ def DataBB():
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
   
-    """ #Last object in list 
-    print(listValues[2 ,-1:]) """
 
 
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
@@ -824,11 +822,11 @@ def DataBB():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        ["4/23", Output[0]],
+        ["4/24", Output[1]],
+        ["4/25", Output[2]],
+        ["4/26", Output[3]],
+        ["4/27", Output[4]]
     ]
 
     table = ax.table(cellText = table_data, loc='center')
@@ -841,19 +839,16 @@ def DataBB():
 
 
 
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.yticks(y)
-    plt.scatter(listValues,y)
-    plt.show() """
+
 
 """ DataDis()
-K.clear_session()
+K.clear_session() """
 DataNord()
 K.clear_session()
-DataBB() """
-schedule.every().monday.do(DataDis)
+DataBB()
+""" schedule.every().monday.do(DataDis)
 schedule.every().monday.do(DataNord)
-schedule.every().monday.do(DataBB)
+schedule.every().monday.do(DataBB) """
 
 
 while True:
