@@ -264,7 +264,7 @@ def DataDis():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
-    Output = ["%.2f" % elem for elem in listValues]
+    Output = ["$%.2f" % elem for elem in listValues]
     Output = np.array(Output).ravel()
  
     df3 = df2.tolist()
@@ -272,12 +272,24 @@ def DataDis():
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
 
-    #Last object in list 
-    print("This is ListValues ", listValues[:-1])
-    print("This is Output ", Output)
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
+  
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
 
 
-    
+
+
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
@@ -290,14 +302,14 @@ def DataDis():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", Output[0]],
-        ["4/24", Output[1]],
-        ["4/25", Output[2]],
-        ["4/26", Output[3]],
-        ["4/27", Output[4]]
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
@@ -529,7 +541,7 @@ def DataNord():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
-    Output = ["%.2f" % elem for elem in listValues]
+    Output = ["$%.2f" % elem for elem in listValues]
     Output = np.array(Output).ravel()
 
     df3 = df2.tolist()
@@ -537,12 +549,26 @@ def DataNord():
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
 
-    #Last object in list 
-    print(listValues[:-1])
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
+  
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
 
 
 
-    
+
+
+    #Graph for the prediction trends
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
@@ -555,14 +581,14 @@ def DataNord():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", Output[0]],
-        ["4/24", Output[1]],
-        ["4/25", Output[2]],
-        ["4/26", Output[3]],
-        ["4/27", Output[4]]
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
@@ -798,7 +824,7 @@ def DataBB():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
-    Output = ["%.2f" % elem for elem in listValues]
+    Output = ["$%.2f" % elem for elem in listValues]
     Output = np.array(Output).ravel()
     print(listValues)
    
@@ -807,7 +833,22 @@ def DataBB():
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
   
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
+
+
 
 
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
@@ -821,15 +862,15 @@ def DataBB():
     fig,ax = plt.subplots()
 
     table_data = [
-        ["Date", "Closing Prices in USD"],
-        ["4/23", Output[0]],
-        ["4/24", Output[1]],
-        ["4/25", Output[2]],
-        ["4/26", Output[3]],
-        ["4/27", Output[4]]
+        ["Date", "Closing Prices"],
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
@@ -842,13 +883,13 @@ def DataBB():
 
 
 """ DataDis()
-K.clear_session() """
+K.clear_session()
 DataNord()
 K.clear_session()
-DataBB()
-""" schedule.every().monday.do(DataDis)
-schedule.every().monday.do(DataNord)
-schedule.every().monday.do(DataBB) """
+DataBB() """
+schedule.every().sunday.do(DataDis)
+schedule.every().sunday.do(DataNord)
+schedule.every().sunday.do(DataBB)
 
 
 while True:
