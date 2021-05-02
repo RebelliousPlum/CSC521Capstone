@@ -7,6 +7,7 @@ from math import sqrt
 import schedule
 from getch import pause
 import warnings
+import os
 
 #Libraries used for plotting and graphing
 import matplotlib.pyplot as plt 
@@ -33,6 +34,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 from datetime import date
 import datetime
 import time as ti
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 with warnings.catch_warnings():
     warnings.filterwarnings('ignore', r'elementwise comparison failed; returning scalar instead, but in the future will perform elementwise comparison(.*)')
@@ -261,18 +264,32 @@ def DataDis():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["$%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
  
     df3 = df2.tolist()
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
 
-    #Last object in list 
-    print(listValues[:-1])
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
+  
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
 
 
 
-    
+
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
@@ -285,24 +302,21 @@ def DataDis():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
     ax.axis('off')
     plt.savefig('Disney 5 day Closing')
     plt.gcf().clear()
-        
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.scatter(listValues,y)
-    plt.show() """
+
 
 def DataNord():
     #Get todays date
@@ -527,18 +541,34 @@ def DataNord():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["$%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
 
     df3 = df2.tolist()
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
 
-    #Last object in list 
-    print(listValues[:-1])
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
+  
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
 
 
 
-    
+
+
+    #Graph for the prediction trends
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index > 2517))[0], color = 'blue') 
     plt.ylabel('Closing Price')
@@ -551,26 +581,20 @@ def DataNord():
 
     table_data = [
         ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
     ax.axis('off')
     plt.savefig('Nordstrom 5 day Closing')
     plt.gcf().clear()
-
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.scatter(listValues,y)
-    plt.show() """
-    rows = ("4/23" , "4/24", "4/25", "4/26", "4/27")
-    column = ("Closing Price")
 
 
 
@@ -800,6 +824,8 @@ def DataBB():
     
     listValues = scaler.inverse_transform(lst_output)
     listValues = np.array(listValues).ravel()
+    Output = ["$%.2f" % elem for elem in listValues]
+    Output = np.array(Output).ravel()
     print(listValues)
    
  
@@ -807,9 +833,22 @@ def DataBB():
     df3.extend(lst_output)
     df3 = scaler.inverse_transform(df3).tolist()
     dfObj = pd.DataFrame(df3)
+
+    #Dates for next 5 days
+    day_one = datetime.datetime.today() + datetime.timedelta(days = 1)
+    day_two = datetime.datetime.today() + datetime.timedelta(days = 2)
+    day_three = datetime.datetime.today() + datetime.timedelta(days = 3)
+    day_four = datetime.datetime.today() + datetime.timedelta(days = 4)
+    day_five = datetime.datetime.today() + datetime.timedelta(days = 5)
   
-    """ #Last object in list 
-    print(listValues[2 ,-1:]) """
+    #Formatting the date
+    monday = day_one.strftime("%Y-%m-%d")
+    tuesday = day_two.strftime("%Y-%m-%d")
+    wednesday = day_three.strftime("%Y-%m-%d")
+    thursday = day_four.strftime("%Y-%m-%d")
+    friday = day_five.strftime("%Y-%m-%d")
+
+
 
 
     plt.plot(dfObj.mask(dfObj.apply(lambda x: x.index < 2517))[0], color = 'red')
@@ -823,15 +862,15 @@ def DataBB():
     fig,ax = plt.subplots()
 
     table_data = [
-        ["Date", "Closing Prices in USD"],
-        ["4/23", listValues[0]],
-        ["4/24", listValues[1]],
-        ["4/25", listValues[2]],
-        ["4/26", listValues[3]],
-        ["4/27", listValues[4]]
+        ["Date", "Closing Prices"],
+        [monday, Output[0]],
+        [tuesday, Output[1]],
+        [wednesday, Output[2]],
+        [thursday, Output[3]],
+        [friday, Output[4]]
     ]
 
-    table = ax.table(cellText = table_data, loc='center')
+    table = ax.table(cellText = table_data, cellLoc = 'center', loc = 'center')
 
     table.set_fontsize(14)
     table.scale(1,4)
@@ -841,19 +880,16 @@ def DataBB():
 
 
 
-    """ y = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
-    plt.yticks(y)
-    plt.scatter(listValues,y)
-    plt.show() """
+
 
 """ DataDis()
 K.clear_session()
 DataNord()
 K.clear_session()
 DataBB() """
-schedule.every().monday.do(DataDis)
-schedule.every().monday.do(DataNord)
-schedule.every().monday.do(DataBB)
+schedule.every().sunday.do(DataDis)
+schedule.every().sunday.do(DataNord)
+schedule.every().sunday.do(DataBB)
 
 
 while True:
